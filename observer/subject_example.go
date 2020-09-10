@@ -41,7 +41,9 @@ func (subject *SubjectExample) NotifyObservers() {
 		if item.Async() {
 			channel := make(chan string)
 			go item.Update(channel)
+
 		}
+
 	}
 	for _, item := range subject.observerList {
 		if !item.Async() {
