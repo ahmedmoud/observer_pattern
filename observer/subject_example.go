@@ -8,15 +8,15 @@ var subject *SubjectExample
 
 type SubjectExample struct {
 	observerList   [] IObserver
-	params         map[string]interface{}
 	StringToUpdate string
 }
 
-func NewSubjectExample() *SubjectExample {
+func NewSubjectExample(newValue string) *SubjectExample {
 	if subject != nil {
 		return subject
 	}
 	subject = &SubjectExample{}
+	subject.StringToUpdate = newValue
 	return subject
 }
 
@@ -38,13 +38,15 @@ func (subject *SubjectExample) RegisterObserver(observer IObserver) {
 func (subject *SubjectExample) NotifyObservers() {
 
 	for _, item := range subject.observerList {
-		if item.IsAsync() {
-			go item.Update(subject)
+		if item.Async() {
+			channel := make(chan string)
+			go item.Update(channel)
 		}
 	}
 	for _, item := range subject.observerList {
-		if !item.IsAsync() {
-			 item.Update(subject)
+		if !item.Async() {
+			channel := make(chan string)
+			item.Update(channel)
 		}
 	}
 }

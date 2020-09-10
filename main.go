@@ -2,24 +2,34 @@ package main
 
 import (
 	"fmt"
+	"observer_pattern/Enums"
+	"observer_pattern/observer"
+	"time"
 )
-func init() {
-	subjectExample := observer.NewSubjectExample()
-	observerExample := observer.NewObserverExample()
 
-}
 func main() {
 
-	i, j := 0, 0
-	fmt.Scanf("%d ", &i)
-	fmt.Scanf("%d ", &j)
-	done := make(chan int)
+	//subjectExample := observer.NewSubjectExample("new subject instance")
+	//observerExample := observer.NewObserverExample()
+	//subjectExample.RegisterObserver(observerExample)
+	//subjectExample.NotifyObservers()
+	observer.Listen(Enums.EXAMPLE_OBSERVER_KEY)
+	channel := make(chan string, 2)
 
-	go func() {
-		done <- i + j
-	}()
+	 go func(channel chan string) {
+		 //time.Sleep(2* time.Second)
+		 fmt.Println("my channel number " + <-channel)
+		 fmt.Println("my channel number " + <-channel)
+		 fmt.Println("my channel number " + <-channel)
 
-	fmt.Println(<-done)
-	fmt.Println("here")
+	 }(channel)
+	fmt.Println("here 1")
+	channel <- "1"
+	fmt.Println("here 2")
+	channel <- "2"
+	channel <- "3"
+	fmt.Println("here 3")
+
+	time.Sleep(20 * time.Second)
 
 }

@@ -2,7 +2,7 @@ package observer
 
 
 type IObserver interface {
-	Update(subject ISubject)
+	Update(chan string)
 	GetKey() string
-	IsAsync() bool
+	Async() bool
 }
